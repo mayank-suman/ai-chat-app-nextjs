@@ -5,6 +5,7 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Button } from '@/components/ui/button';
 
 // function Register() {
 //   const submit = (formData: FormData) => {
@@ -138,7 +139,7 @@ function Register() {
               </div>
 
               <div>
-                <button
+                {/* <button
                   type='submit'
                   className='flex w-full items-center justify-center space-x-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
                 >
@@ -149,7 +150,8 @@ function Register() {
                     ></div>
                   )}
                   <span className=''>Sign up</span>
-                </button>
+                </button> */}
+                <Button type='submit'>Click me</Button>
               </div>
             </form>
           </div>
