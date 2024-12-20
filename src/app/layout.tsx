@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
 
 // If loading a variable font, you don't need to specify the font weight
 const DMSans = DM_Sans({
@@ -22,8 +23,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={`${DMSans.className} antialiased`}>{children}</body>
+    <html
+      lang='en'
+      suppressHydrationWarning
+    >
+      <body className={`${DMSans.className} antialiased`}>
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
