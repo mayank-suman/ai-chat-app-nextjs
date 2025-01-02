@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { z } from 'zod';
@@ -15,20 +15,28 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { createAccount } from '@/lib/appwrite/account';
+import { useToast } from '@/hooks/use-toast';
 
-type Inputs = {
+export type Inputs = {
   fullName: string;
   email: string;
   password: string;
 };
 
 const formSchema = z.object({
-  fullName: z.string().min(1, { message: 'This is required' }),
-  email: z.string().email().min(1, { message: 'This is required' }),
-  password: z.string().min(1, { message: 'This is required' }),
+  fullName: z.string().min(1, { message: 'This field is required' }),
+  email: z.string().email().min(1, { message: 'This field is required' }),
+  password: z.string().min(1, { message: 'This field is required' }),
 });
 
+// TODO: redirect to home when user already login
+// TODO: after successful sign redirect to login screen
+// TODO: add forgot password link
+// show message after successful signup
 function Register() {
+  const { toast } = useToast();
+
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,12 +47,26 @@ function Register() {
   });
 
   const {
-    register,
     handleSubmit,
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const response = await createAccount(data);
+
+      console.log(
+        '🚀 ~ constonSubmit:SubmitHandler<Inputs>= ~ response:',
+        response,
+      );
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Form error',
+        description: error.message,
+      });
+    }
+  };
 
   return (
     <>
