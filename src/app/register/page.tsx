@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { createAccount } from '@/lib/appwrite/account';
 import { useToast } from '@/hooks/use-toast';
+import ControlledField from '@/components/controller-field';
 
 export type Inputs = {
   fullName: string;
@@ -112,6 +113,14 @@ function Register() {
                     </FormItem>
                   )}
                 />
+                {/* BUG: make controller component work */}
+                {/* <ControlledField
+                  label='Full Name'
+                  inputProps={{
+                    placeholder: 'enter your name',
+                    type: 'text',
+                  }}
+                /> */}
                 <FormField
                   control={form.control}
                   name='email'
