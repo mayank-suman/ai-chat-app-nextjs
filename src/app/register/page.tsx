@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { createAccount } from '@/lib/appwrite/account';
 import { useToast } from '@/hooks/use-toast';
 import ControlledField from '@/components/controller-field';
+import { useRouter } from 'next/navigation';
 
 export type Inputs = {
   fullName: string;
@@ -32,11 +33,10 @@ const formSchema = z.object({
 });
 
 // TODO: redirect to home when user already login
-// TODO: after successful sign redirect to login screen
 // TODO: add forgot password link
-// show message after successful signup
 function Register() {
   const { toast } = useToast();
+  const { push } = useRouter();
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
@@ -60,6 +60,15 @@ function Register() {
         '🚀 ~ constonSubmit:SubmitHandler<Inputs>= ~ response:',
         response,
       );
+
+      toast({
+        variant: 'default',
+        title: 'Account created',
+        description: 'You have successfully created an account',
+      });
+
+      // navigate to login screen
+      push('/login');
     } catch (error) {
       toast({
         variant: 'destructive',
