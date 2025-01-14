@@ -31,6 +31,7 @@ const formSchema = z.object({
 });
 
 // TODO: add forgot password link
+// TODO: refactor logged in user logic into middleware
 function Login() {
   const { toast } = useToast();
   const { push } = useRouter();
@@ -51,10 +52,6 @@ function Login() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const response = await login(data);
-      console.log(
-        '🚀 ~ constonSubmit:SubmitHandler<Inputs>= ~ response:',
-        response,
-      );
 
       toast({
         variant: 'default',

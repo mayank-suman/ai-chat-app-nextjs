@@ -32,7 +32,6 @@ const formSchema = z.object({
   password: z.string().min(1, { message: 'This field is required' }),
 });
 
-// TODO: redirect to home when user already login
 function Register() {
   const { toast } = useToast();
   const { push } = useRouter();
@@ -77,15 +76,15 @@ function Register() {
     }
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const user = await getCurrentUser();
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
 
-  //     if (user) {
-  //       redirect('/');
-  //     }
-  //   })();
-  // }, []);
+      if (user) {
+        redirect('/');
+      }
+    })();
+  }, []);
 
   return (
     <>

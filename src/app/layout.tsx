@@ -1,8 +1,10 @@
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { AppSidebar } from '@/components/app-sidebar';
 
 // If loading a variable font, you don't need to specify the font weight
 const DMSans = DM_Sans({
@@ -35,8 +37,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Toaster />
+          <SidebarProvider>
+            <AppSidebar />
+            <main>
+              <SidebarTrigger />
+              {children}
+              <Toaster />
+            </main>
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>
