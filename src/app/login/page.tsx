@@ -15,9 +15,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createAccount, getCurrentUser } from '@/lib/appwrite/account';
+import { getCurrentUser, login } from '@/lib/appwrite/account';
 import { useToast } from '@/hooks/use-toast';
-import ControlledField from '@/components/controller-field';
 import { redirect, useRouter } from 'next/navigation';
 
 export type Inputs = {
@@ -27,20 +26,18 @@ export type Inputs = {
 };
 
 const formSchema = z.object({
-  fullName: z.string().min(1, { message: 'This field is required' }),
   email: z.string().email().min(1, { message: 'This field is required' }),
   password: z.string().min(1, { message: 'This field is required' }),
 });
 
-// TODO: redirect to home when user already login
-function Register() {
+// TODO: add forgot password link
+function Login() {
   const { toast } = useToast();
   const { push } = useRouter();
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: '',
       email: '',
       password: '',
     },
@@ -53,8 +50,7 @@ function Register() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const response = await createAccount(data);
-
+      const response = await login(data);
       console.log(
         '🚀 ~ constonSubmit:SubmitHandler<Inputs>= ~ response:',
         response,
@@ -62,12 +58,11 @@ function Register() {
 
       toast({
         variant: 'default',
-        title: 'Account created',
-        description: 'You have successfully created an account',
+        title: 'Successfully login',
       });
 
       // navigate to login screen
-      push('/login');
+      push('/');
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -77,15 +72,15 @@ function Register() {
     }
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const user = await getCurrentUser();
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
 
-  //     if (user) {
-  //       redirect('/');
-  //     }
-  //   })();
-  // }, []);
+      if (user) {
+        redirect('/');
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -107,38 +102,13 @@ function Register() {
             />
           </Link>
           <div className='flex flex-col'>
-            <h2 className=''>Create an account</h2>
-            <p className=''>Register today</p>
+            <h2 className=''>Login</h2>
+            <p className=''>Enter your credentials</p>
             <Form {...form}>
               <form
                 className='space-y-6'
                 onSubmit={handleSubmit(onSubmit)}
               >
-                <FormField
-                  control={form.control}
-                  name='fullName'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='enter your name'
-                          type='text'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* BUG: make controller component work */}
-                {/* <ControlledField
-                  label='Full Name'
-                  inputProps={{
-                    placeholder: 'enter your name',
-                    type: 'text',
-                  }}
-                /> */}
                 <FormField
                   control={form.control}
                   name='email'
@@ -184,19 +154,19 @@ function Register() {
                         role='status'
                       ></div>
                     )}
-                    Register
+                    login
                   </Button>
                 </div>
               </form>
             </Form>
           </div>
           <p className='mt-10 text-center text-sm/6 text-gray-500'>
-            Allready have a account? &nbsp;
+            Don't have a account? &nbsp;
             <a
-              href='/login'
+              href='/register'
               className='font-semibold text-indigo-600 hover:text-indigo-500'
             >
-              Sign in
+              Sign up
             </a>
           </p>
         </div>
@@ -205,4 +175,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
