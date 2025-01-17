@@ -39,8 +39,8 @@ function Login() {
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'mayankcsmn@gmail.com',
+      password: 'password',
     },
   });
 
@@ -51,7 +51,11 @@ function Login() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const response = await login(data);
+      const session = await login(data);
+      console.log(
+        '🚀 ~ constonSubmit:SubmitHandler<Inputs>= ~ session:',
+        session,
+      );
 
       toast({
         variant: 'default',
@@ -69,15 +73,15 @@ function Login() {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const user = await getCurrentUser();
+  // useEffect(() => {
+  //   (async () => {
+  //     const user = await getCurrentUser();
 
-      if (user) {
-        redirect('/');
-      }
-    })();
-  }, []);
+  //     if (user) {
+  //       redirect('/');
+  //     }
+  //   })();
+  // }, []);
 
   return (
     <>

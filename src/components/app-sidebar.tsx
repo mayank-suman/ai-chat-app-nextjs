@@ -1,3 +1,7 @@
+'use client';
+
+import { redirect } from 'next/navigation';
+
 import {
   Calendar,
   ChevronUp,
@@ -25,6 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getCurrentUser, logoutFromAllDevices } from '@/lib/appwrite/account';
 
 // Menu items.
 const items = [
@@ -54,6 +59,11 @@ const items = [
     icon: Settings,
   },
 ];
+
+const onSignOutButtonClick = () => {
+  logoutFromAllDevices();
+  redirect('/');
+};
 
 export function AppSidebar() {
   return (
@@ -92,7 +102,7 @@ export function AppSidebar() {
                 className='w-[--radix-popper-anchor-width]'
               >
                 <DropdownMenuItem>
-                  <span>Sign out</span>
+                  <span onClick={onSignOutButtonClick}>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

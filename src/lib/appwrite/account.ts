@@ -13,3 +13,7 @@ export const login = async ({ email, password }: Inputs) => {
 export const getCurrentUser = async () => {
   return account.get();
 };
+
+export const logoutFromAllDevices = async () => {
+  return account.deleteSession('current');
+};

@@ -17,7 +17,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { createAccount, getCurrentUser } from '@/lib/appwrite/account';
 import { useToast } from '@/hooks/use-toast';
-import ControlledField from '@/components/controller-field';
 import { redirect, useRouter } from 'next/navigation';
 
 export type Inputs = {
