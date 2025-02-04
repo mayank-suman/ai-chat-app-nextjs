@@ -1,7 +1,7 @@
 'use server';
 import { Client, Account, ID } from 'node-appwrite';
 import { cookies } from 'next/headers';
-import { Inputs } from '@/app/login/components/form';
+import { Inputs } from '@/app/(authentication)/login/components/form';
 
 const COOKIE_NAME = 'appwrite-session-cookie';
 

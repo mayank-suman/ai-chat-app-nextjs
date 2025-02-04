@@ -27,7 +27,7 @@ async function Register() {
           <SignupForm />
         </div>
         <p className='mt-10 text-center text-sm/6 text-gray-500'>
-          Allready have a account? &nbsp;
+          Already have a account? &nbsp;
           <a
             href='/login'
             className='font-semibold text-indigo-600 hover:text-indigo-500'
