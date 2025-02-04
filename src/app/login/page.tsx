@@ -4,7 +4,6 @@ import React from 'react';
 import LoginForm from './components/form';
 
 // TODO: add forgot password link
-// TODO: refactor logged in user logic into middleware
 async function Login() {
   return (
     <>
