@@ -30,6 +30,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getCurrentUser, logoutFromAllDevices } from '@/lib/appwrite/account';
+import { signOut } from '@/lib/server/appwrite';
 
 // Menu items.
 const items = [
@@ -60,8 +61,8 @@ const items = [
   },
 ];
 
-const onSignOutButtonClick = () => {
-  logoutFromAllDevices();
+const onSignOutButtonClick = async () => {
+  await signOut();
   redirect('/');
 };
 

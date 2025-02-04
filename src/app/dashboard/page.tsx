@@ -1,7 +1,18 @@
-'use client';
+import { getLoggedInUser } from '@/lib/server/appwrite';
+import { redirect } from 'next/navigation';
 
-function HomeDashboard() {
-  return <></>;
+async function HomeDashboard() {
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  return (
+    <>
+      <pre></pre>
+    </>
+  );
 }
 
 export default HomeDashboard;
