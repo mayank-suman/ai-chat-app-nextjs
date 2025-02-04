@@ -2,17 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import LoginForm from './components/form';
-import { getLoggedInUser } from '@/lib/server/appwrite';
-import { redirect } from 'next/navigation';
 
 // TODO: add forgot password link
 // TODO: refactor logged in user logic into middleware
 async function Login() {
-  const user = await getLoggedInUser();
-  if (user) {
-    redirect('/');
-  }
-
   return (
     <>
       <div className='flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8'>
