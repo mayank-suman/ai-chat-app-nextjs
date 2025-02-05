@@ -1,9 +1,7 @@
+import { Prompt } from './components/prompt';
+
 async function HomeDashboard() {
-  return (
-    <>
-      <pre></pre>
-    </>
-  );
+  return <Prompt />;
 }
 
 export default HomeDashboard;

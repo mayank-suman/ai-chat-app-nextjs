@@ -1,5 +1,5 @@
 import { getLoggedInUser } from '@/lib/server/appwrite';
-import { NextResponse, NextRequest, NextFetchEvent } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
 // Specify the public routes
 const publicRoutes = ['/login', '/register'];
