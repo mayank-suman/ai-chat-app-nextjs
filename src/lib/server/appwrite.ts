@@ -1,5 +1,5 @@
 'use server';
-import { Client, Account, ID } from 'node-appwrite';
+import { Client, Account, ID, Databases } from 'node-appwrite';
 import { cookies } from 'next/headers';
 import { Inputs } from '@/app/(authentication)/login/components/form';
 
@@ -20,6 +20,9 @@ async function createSessionClient() {
   return {
     get account() {
       return new Account(client);
+    },
+    get database() {
+      return new Databases(client);
     },
   };
 }
@@ -81,4 +84,48 @@ export async function signOut() {
 
   (await cookies()).delete(COOKIE_NAME);
   await account.deleteSession('current');
+}
+
+export async function createConversation({ text }: { text: string }) {
+  const { database } = await createSessionClient();
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    throw new Error('No user logged in');
+  }
+
+  return database.createDocument(
+    process.env.NEXT_PUBLIC_AI_CHAT_APP_DATABASE_ID || '',
+    'conversations',
+    ID.unique(),
+    { text: text, userId: user?.$id },
+  );
+}
+
+export async function createChat({
+  userPrompt,
+  aiResponse,
+  conversationId,
+}: {
+  userPrompt: string;
+  aiResponse: string;
+  conversationId: string;
+}) {
+  const { database } = await createSessionClient();
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    throw new Error('No user logged in');
+  }
+
+  return database.createDocument(
+    process.env.NEXT_PUBLIC_AI_CHAT_APP_DATABASE_ID || '',
+    'chats',
+    ID.unique(),
+    {
+      user_prompt: userPrompt,
+      ai_response: aiResponse,
+      conversation: conversationId,
+    },
+  );
 }

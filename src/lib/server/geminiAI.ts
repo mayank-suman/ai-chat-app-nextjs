@@ -23,3 +23,26 @@ export const generateContent = async (prompt: string) => {
     console.error(error);
   }
 };
+
+export const getConversationTitle = async (prompt: string) => {
+  const input = `Given a user prompt, generate a concise and informative title that accurately describes the conversation.
+  Consider keywords, topics, and the overall intent of the prompt. 
+  Response in plain text format, not markdown. Prompt: ${prompt}'`;
+
+  return (await generateContent(input)) ?? 'Untitled Conversation';
+};
+
+export const getAIResponse = async (prompt: string, chatHistory: []) => {
+  try {
+    const model = createClient();
+    const newChart = model.startChat({
+      history: chatHistory,
+    });
+
+    const res = await newChart.sendMessage(prompt);
+
+    return res?.response?.text();
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -16,7 +16,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { generateContent } from '@/lib/server/geminiAI';
+import { getAIResponse, getConversationTitle } from '@/lib/server/geminiAI';
+import { createChat, createConversation } from '@/lib/server/appwrite';
 
 const FormSchema = z.object({
   bio: z
@@ -39,19 +40,34 @@ export function Prompt() {
   const { isLoading } = form.formState;
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const prompt = 'Explain how AI works';
+    try {
+      const title = await getConversationTitle(data.bio);
+      const conversation = await createConversation({ text: title });
+      const aiResponse = await getAIResponse(data.bio, []);
+      const chat = await createChat({
+        userPrompt: data.bio,
+        aiResponse: aiResponse ?? '',
+        conversationId: conversation.$id,
+      });
 
-    const result = await generateContent(prompt);
-    console.log(result);
+      console.log('🚀 ~ onSubmit ~ chat:', chat);
 
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+      toast({
+        title: 'You submitted the following values:',
+        description: (
+          <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+            <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        ),
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'An error occurred',
+        description: <>{error}</>,
+        variant: 'destructive',
+      });
+    }
   }
 
   return (
@@ -63,12 +79,12 @@ export function Prompt() {
         <FormField
           control={form.control}
           name='bio'
+          defaultValue='Explain how AI works'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Bio</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder='Tell us a little bit about yourself'
+                  placeholder='Enter a prompt here'
                   className='resize-none'
                   {...field}
                 />
