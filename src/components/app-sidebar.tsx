@@ -1,17 +1,7 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-
-import {
-  Calendar,
-  ChevronUp,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-  User2,
-} from 'lucide-react';
-
+import { ChevronUp, User2 } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -29,37 +19,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { getCurrentUser, logoutFromAllDevices } from '@/lib/appwrite/account';
-import { signOut } from '@/lib/server/appwrite';
-
-// Menu items.
-const items = [
-  {
-    title: 'Home',
-    url: '#',
-    icon: Home,
-  },
-  {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
-  },
-];
+import { getConversations, signOut } from '@/lib/server/appwrite';
+import { use, useEffect, useState } from 'react';
+import { Models } from 'node-appwrite';
 
 const onSignOutButtonClick = async () => {
   await signOut();
@@ -67,19 +29,27 @@ const onSignOutButtonClick = async () => {
 };
 
 export function AppSidebar() {
+  // TODO: use "use" hook instead of "useState" hook
+  const [conversations, setConversations] = useState<Models.Document[]>([]);
+
+  useEffect(() => {
+    getConversations().then((data) => {
+      setConversations(data.documents);
+    });
+  }, []);
+
   return (
     <Sidebar collapsible='icon'>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Recent</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {conversations.map((conversation) => (
+                <SidebarMenuItem key={conversation.$id}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                    <a href={`/conversation/${conversation.$id}`}>
+                      <span>{conversation.text}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
