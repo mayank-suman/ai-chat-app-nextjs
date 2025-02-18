@@ -1,4 +1,4 @@
-This is AI chat app build using NextJs, Google Gemini, Appwrite, shadcn.
+# This is AI chat app build using NextJs, Google Gemini, Appwrite, shadcn.
 
 ## Getting Started
 
