@@ -20,8 +20,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getConversations, signOut } from '@/lib/server/appwrite';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Models } from 'node-appwrite';
+import useUser from '@/hooks/use-user';
 
 const onSignOutButtonClick = async () => {
   await signOut();
@@ -29,6 +30,7 @@ const onSignOutButtonClick = async () => {
 };
 
 export function AppSidebar() {
+  const user = useUser();
   // TODO: use "use" hook instead of "useState" hook
   const [conversations, setConversations] = useState<Models.Document[]>([]);
 
@@ -64,7 +66,7 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 /> {user?.name}
                   <ChevronUp className='ml-auto' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>

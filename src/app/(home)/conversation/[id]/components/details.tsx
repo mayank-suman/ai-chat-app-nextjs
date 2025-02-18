@@ -2,7 +2,7 @@
 import React from 'react';
 
 function Detail({ conversation }: { conversation: Record<string, any> }) {
-  //   console.log('🚀 ~ Detail ~ conversation:', conversation);
+  console.log('🚀 ~ Detail ~ conversation:', conversation);
 
   return (
     <>

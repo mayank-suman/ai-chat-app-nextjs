@@ -1,18 +1,24 @@
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import UserProvider from '@/components/User-provider';
+import { getLoggedInUser } from '@/lib/server/appwrite';
 
-export default function RegistrationLayout({
+export default async function RegistrationLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getLoggedInUser();
+
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <section>
-        <SidebarTrigger />
-        {children}
-      </section>
+      <UserProvider value={user}>
+        <AppSidebar />
+        <section>
+          <SidebarTrigger />
+          {children}
+        </section>
+      </UserProvider>
     </SidebarProvider>
   );
 }
