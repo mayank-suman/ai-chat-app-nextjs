@@ -7,24 +7,24 @@ import {
   FormSchema as GenericFormSchema,
   GenericPrompt,
 } from '@/components/prompt';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export function Prompt() {
+export function PromptInput({ conversationId }: { conversationId: string }) {
   const { toast } = useToast();
-  const router = useRouter();
 
   async function onSubmit(data: z.infer<typeof GenericFormSchema>) {
     try {
-      const title = await getConversationTitle(data.userPrompt);
-      const conversation = await createConversation({ text: title });
-      const aiResponse = await getAIResponse(data.userPrompt, []);
+      const aiResponse = (await getAIResponse(data.userPrompt, [])) ?? '';
+
+      if (!conversationId) {
+        throw new Error('No conversation ID');
+      }
+
       const chat = await createChat({
         userPrompt: data.userPrompt,
-        aiResponse: aiResponse ?? '',
-        conversationId: conversation.$id,
+        aiResponse: aiResponse,
+        conversationId: conversationId,
       });
-
-      router.push(`/conversation/${conversation.$id}`);
     } catch (error) {
       console.error(error);
       toast({

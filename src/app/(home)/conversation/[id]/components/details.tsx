@@ -1,10 +1,16 @@
 'use client';
 import React from 'react';
 import UserPrompt from './userPrompt';
+import { PromptInput } from './promptInput';
 
-function Detail({ conversation }: { conversation: Record<string, any> }) {
+function Detail({
+  conversation,
+  id,
+}: {
+  conversation: Record<string, any>;
+  id: string;
+}) {
   console.log('🚀 ~ Detail ~ conversation:', conversation);
-
   return (
     <>
       <h1>{conversation.text}</h1>
@@ -14,6 +20,7 @@ function Detail({ conversation }: { conversation: Record<string, any> }) {
           <p>{chat.ai_response}</p>
         </div>
       ))}
+      <PromptInput conversationId={id} />
     </>
   );
 }

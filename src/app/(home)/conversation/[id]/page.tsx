@@ -8,7 +8,10 @@ async function Conversation({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <>
-      <Detail conversation={conversation} />
+      <Detail
+        conversation={conversation}
+        id={id}
+      />
     </>
   );
 }
