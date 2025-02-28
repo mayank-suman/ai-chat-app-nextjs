@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import UserPrompt from './userPrompt';
 
 function Detail({ conversation }: { conversation: Record<string, any> }) {
   console.log('🚀 ~ Detail ~ conversation:', conversation);
@@ -9,7 +10,7 @@ function Detail({ conversation }: { conversation: Record<string, any> }) {
       <h1>{conversation.text}</h1>
       {conversation.chats.map((chat: Record<string, any>) => (
         <div key={chat.$id}>
-          <h2>{chat.user_prompt}</h2>
+          <UserPrompt text={chat.user_prompt} />
           <p>{chat.ai_response}</p>
         </div>
       ))}

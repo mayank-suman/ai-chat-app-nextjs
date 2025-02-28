@@ -3,6 +3,7 @@ import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import StyledComponentsRegistry from '@/lib/styledComponentsReg';
 
 // If loading a variable font, you don't need to specify the font weight
 const DMSans = DM_Sans({
@@ -29,17 +30,19 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className={`${DMSans.className} antialiased`}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main>
-            {children}
-            <Toaster />
-          </main>
-        </ThemeProvider>
+        <StyledComponentsRegistry>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main>
+              {children}
+              <Toaster />
+            </main>
+          </ThemeProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

@@ -14,7 +14,7 @@ export default async function RegistrationLayout({
     <SidebarProvider>
       <UserProvider value={user}>
         <AppSidebar />
-        <section>
+        <section className='flex h-screen w-full flex-col'>
           <SidebarTrigger />
           {children}
         </section>

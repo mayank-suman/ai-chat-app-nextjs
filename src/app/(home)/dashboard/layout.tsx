@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { StyledSection } from './styledLayout';
 
 export const metadata: Metadata = {
   title: 'Create an account',
@@ -9,5 +10,5 @@ export default function RegistrationLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <section>{children}</section>;
+  return <StyledSection>{children}</StyledSection>;
 }

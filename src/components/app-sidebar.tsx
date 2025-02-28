@@ -1,7 +1,7 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-import { ChevronUp, User2 } from 'lucide-react';
+import { ChevronUp, PlusIcon, User2 } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -9,6 +9,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -23,6 +24,7 @@ import { getConversations, signOut } from '@/lib/server/appwrite';
 import { useEffect, useState } from 'react';
 import { Models } from 'node-appwrite';
 import useUser from '@/hooks/use-user';
+import { Button } from './ui/button';
 
 const onSignOutButtonClick = async () => {
   await signOut();
@@ -43,6 +45,17 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible='icon'>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <Button onClick={() => redirect('/dashboard')}>
+                  <PlusIcon /> New chat
+                </Button>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Recent</SidebarGroupLabel>
           <SidebarGroupContent>
