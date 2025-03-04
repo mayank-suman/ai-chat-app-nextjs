@@ -1,3 +1,4 @@
+'use client';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import useUser from '@/hooks/use-user';
 import { ArrowDown, ArrowUp } from 'lucide-react';
@@ -14,7 +15,7 @@ function UserPrompt({ text }: { text: string }) {
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
 
   return (
-    <>
+    <div className='user-prompt'>
       <Avatar>
         <AvatarFallback>{getFirstLetters(user.name)}</AvatarFallback>
       </Avatar>
@@ -31,7 +32,7 @@ function UserPrompt({ text }: { text: string }) {
         />
       )}
       <h2>{text}</h2>
-    </>
+    </div>
   );
 }
 
