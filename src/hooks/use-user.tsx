@@ -1,4 +1,4 @@
-import { UserContext } from '@/components/User-provider';
+import { UserContext } from '@/components/providers/User-provider';
 import React, { useContext } from 'react';
 
 function useUser() {

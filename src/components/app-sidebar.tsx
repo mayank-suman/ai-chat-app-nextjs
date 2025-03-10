@@ -21,10 +21,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getConversations, signOut } from '@/lib/server/appwrite';
-import { useEffect, useState } from 'react';
 import { Models } from 'node-appwrite';
 import useUser from '@/hooks/use-user';
 import { Button } from './ui/button';
+import { useQuery } from '@tanstack/react-query';
 
 const onSignOutButtonClick = async () => {
   await signOut();
@@ -33,14 +33,10 @@ const onSignOutButtonClick = async () => {
 
 export function AppSidebar() {
   const user = useUser();
-  // TODO: use "use" hook instead of "useState" hook
-  const [conversations, setConversations] = useState<Models.Document[]>([]);
-
-  useEffect(() => {
-    getConversations().then((data) => {
-      setConversations(data.documents);
-    });
-  }, []);
+  const { data: conversations } = useQuery({
+    queryKey: ['conversations'],
+    queryFn: getConversations,
+  });
 
   return (
     <Sidebar collapsible='icon'>
@@ -60,7 +56,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Recent</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {conversations.map((conversation) => (
+              {conversations?.documents.map((conversation) => (
                 <SidebarMenuItem key={conversation.$id}>
                   <SidebarMenuButton asChild>
                     <a href={`/conversation/${conversation.$id}`}>

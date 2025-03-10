@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import StyledComponentsRegistry from '@/lib/styledComponentsReg';
+import { ThemeProvider } from '@/components/providers/theme-provider';
+import TanstackQueryProvider from '@/components/providers/tanstack-query-provider';
 
 // If loading a variable font, you don't need to specify the font weight
 const DMSans = DM_Sans({
@@ -30,19 +31,21 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className={`${DMSans.className} antialiased`}>
-        <StyledComponentsRegistry>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main>
-              {children}
-              <Toaster />
-            </main>
-          </ThemeProvider>
-        </StyledComponentsRegistry>
+        <TanstackQueryProvider>
+          <StyledComponentsRegistry>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main>
+                {children}
+                <Toaster />
+              </main>
+            </ThemeProvider>
+          </StyledComponentsRegistry>
+        </TanstackQueryProvider>
       </body>
     </html>
   );

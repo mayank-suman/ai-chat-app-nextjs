@@ -2,6 +2,12 @@
 import { Client, Account, ID, Databases, Query } from 'node-appwrite';
 import { cookies } from 'next/headers';
 import { Inputs } from '@/app/(authentication)/login/components/form';
+import { type Models } from 'node-appwrite';
+
+interface Conversation extends Models.Document {
+  $id: string;
+  text: string;
+}
 
 const COOKIE_NAME = 'appwrite-session-cookie';
 
@@ -138,7 +144,7 @@ export async function getConversations() {
     throw new Error('No user logged in');
   }
 
-  return database.listDocuments(
+  return database.listDocuments<Conversation>(
     process.env.NEXT_PUBLIC_AI_CHAT_APP_DATABASE_ID || '',
     'conversations',
     [Query.select(['$id', 'text'])],
@@ -147,6 +153,7 @@ export async function getConversations() {
 
 export async function getConversationById(conversationId: string) {
   const { database } = await createSessionClient();
+
   return database.getDocument(
     process.env.NEXT_PUBLIC_AI_CHAT_APP_DATABASE_ID || '',
     'conversations',
