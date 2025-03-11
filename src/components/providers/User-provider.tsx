@@ -10,7 +10,7 @@ type UserProviderProps = {
   value: Models.User<Models.Preferences> | null;
 };
 
-async function UserProvider({ children, value }: UserProviderProps) {
+function UserProvider({ children, value }: UserProviderProps) {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 

@@ -9,7 +9,6 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -21,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getConversations, signOut } from '@/lib/server/appwrite';
-import { Models } from 'node-appwrite';
 import useUser from '@/hooks/use-user';
 import { Button } from './ui/button';
 import { useQuery } from '@tanstack/react-query';

@@ -1,32 +1,24 @@
 import { getConversationById } from '@/lib/server/appwrite';
-import UserPrompt from './components/userPrompt';
-import { PromptInput } from './components/promptInput';
-import Response from './components/response';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import Main from './main';
 
 async function Conversation({ params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
-  const conversation = await getConversationById(id);
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['conversation', id],
+    queryFn: () => getConversationById(id),
+  });
 
   return (
-    <>
-      <header>
-        <h1>{conversation.text}</h1>
-      </header>
-      <div className='chats'>
-        {conversation.chats.map((chat: Record<string, any>) => (
-          <div
-            className='chat'
-            key={chat.$id}
-          >
-            <UserPrompt text={chat.user_prompt} />
-            <Response text={chat.ai_response} />
-          </div>
-        ))}
-      </div>
-      <footer>
-        <PromptInput conversationId={id} />
-      </footer>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Main id={id} />
+    </HydrationBoundary>
   );
 }
 

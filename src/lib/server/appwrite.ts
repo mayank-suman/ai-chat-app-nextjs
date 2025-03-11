@@ -151,10 +151,21 @@ export async function getConversations() {
   );
 }
 
+interface Chat extends Models.Document {
+  user_prompt: string;
+  ai_response: string;
+}
+
+interface DetailedConversation extends Models.Document {
+  text: string;
+  userId: string;
+  chats: Chat[];
+}
+
 export async function getConversationById(conversationId: string) {
   const { database } = await createSessionClient();
 
-  return database.getDocument(
+  return database.getDocument<DetailedConversation>(
     process.env.NEXT_PUBLIC_AI_CHAT_APP_DATABASE_ID || '',
     'conversations',
     conversationId,
