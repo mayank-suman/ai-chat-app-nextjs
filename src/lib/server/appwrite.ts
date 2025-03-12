@@ -163,6 +163,7 @@ interface DetailedConversation extends Models.Document {
 }
 
 export async function getConversationById(conversationId: string) {
+  console.log('called getConversationById');
   const { database } = await createSessionClient();
 
   return database.getDocument<DetailedConversation>(
