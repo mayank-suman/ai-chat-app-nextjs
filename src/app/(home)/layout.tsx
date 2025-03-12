@@ -2,6 +2,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import UserProvider from '@/components/providers/User-provider';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { getConversations, getLoggedInUser } from '@/lib/server/appwrite';
+import { getConversationsKey } from '@/lib/utils';
 import {
   dehydrate,
   HydrationBoundary,
@@ -17,7 +18,7 @@ export default async function HomeLayout({
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['conversations'],
+    queryKey: getConversationsKey(),
     queryFn: getConversations,
   });
 

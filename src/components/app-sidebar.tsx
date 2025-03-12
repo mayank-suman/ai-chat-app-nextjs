@@ -23,6 +23,7 @@ import { getConversations, signOut } from '@/lib/server/appwrite';
 import useUser from '@/hooks/use-user';
 import { Button } from './ui/button';
 import { useQuery } from '@tanstack/react-query';
+import { getConversationsKey } from '@/lib/utils';
 
 const onSignOutButtonClick = async () => {
   await signOut();
@@ -32,7 +33,7 @@ const onSignOutButtonClick = async () => {
 export function AppSidebar() {
   const user = useUser();
   const { data: conversations } = useQuery({
-    queryKey: ['conversations'],
+    queryKey: getConversationsKey(),
     queryFn: getConversations,
   });
 

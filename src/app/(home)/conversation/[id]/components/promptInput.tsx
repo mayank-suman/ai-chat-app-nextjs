@@ -8,10 +8,12 @@ import {
   GenericPrompt,
 } from '@/components/prompt';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getConversationKeyById } from '@/lib/utils';
 
 export function PromptInput({ conversationId }: { conversationId: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: (payload: {
       data: z.infer<typeof GenericFormSchema>;
@@ -24,22 +26,23 @@ export function PromptInput({ conversationId }: { conversationId: string }) {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['conversation', conversationId],
+        queryKey: getConversationKeyById(conversationId),
       });
     },
   });
 
   async function onSubmit(data: z.infer<typeof GenericFormSchema>) {
     try {
-      const aiResponse = (await getAIResponse(data.userPrompt, [])) ?? '';
-
       if (!conversationId) {
         throw new Error('No conversation ID');
       }
 
+      const aiResponse = (await getAIResponse(data.userPrompt, [])) ?? '';
+
       mutation.mutate({ data: data, aiResponse: aiResponse });
     } catch (error) {
       console.error(error);
+
       toast({
         title: 'An error occurred',
         description: <>{error}</>,

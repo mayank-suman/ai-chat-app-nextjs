@@ -5,10 +5,11 @@ import React from 'react';
 import UserPrompt from './components/userPrompt';
 import { PromptInput } from './components/promptInput';
 import Response from './components/response';
+import { getConversationKeyById } from '@/lib/utils';
 
 function Container({ id }: { id: string }) {
   const { data: conversation } = useQuery({
-    queryKey: ['conversation', id],
+    queryKey: getConversationKeyById(id),
     queryFn: () => getConversationById(id),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
