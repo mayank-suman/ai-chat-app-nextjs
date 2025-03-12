@@ -7,7 +7,7 @@ export const getQueryClient = cache(() => {
     defaultOptions: {
       queries: {
         staleTime: 60 * 1000,
-        gcTime: 1000 * 60 * 60, // Keep unused data in cache for 1 hour
+        gcTime: 15 * 60 * 1000, // Keep unused data in cache for 15 minutes
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
