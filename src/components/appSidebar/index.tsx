@@ -19,11 +19,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { getConversations, signOut } from '@/lib/server/appwrite';
+import { signOut } from '@/lib/server/appwrite';
 import useUser from '@/hooks/use-user';
-import { Button } from './ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { getConversationsKey } from '@/lib/utils';
+import { Button } from '../ui/button';
+import RecentConversations from './components/recentConversations';
 
 const onSignOutButtonClick = async () => {
   await signOut();
@@ -32,10 +31,6 @@ const onSignOutButtonClick = async () => {
 
 export function AppSidebar() {
   const user = useUser();
-  const { data: conversations } = useQuery({
-    queryKey: getConversationsKey(),
-    queryFn: getConversations,
-  });
 
   return (
     <Sidebar collapsible='icon'>
@@ -51,22 +46,7 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Recent</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {conversations?.documents.map((conversation) => (
-                <SidebarMenuItem key={conversation.$id}>
-                  <SidebarMenuButton asChild>
-                    <a href={`/conversation/${conversation.$id}`}>
-                      <span>{conversation.text}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <RecentConversations />
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>

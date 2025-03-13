@@ -1,4 +1,4 @@
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebar } from '@/components/appSidebar';
 import UserProvider from '@/components/providers/User-provider';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { getConversations, getLoggedInUser } from '@/lib/server/appwrite';

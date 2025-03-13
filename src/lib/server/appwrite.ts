@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { Inputs } from '@/app/(authentication)/login/components/form';
 import { type Models } from 'node-appwrite';
 
-interface Conversation extends Models.Document {
+export interface Conversation extends Models.Document {
   $id: string;
   text: string;
 }
@@ -105,6 +105,21 @@ export async function createConversation({ text }: { text: string }) {
     'conversations',
     ID.unique(),
     { text: text, userId: user?.$id },
+  );
+}
+
+export async function deleteConversation(conversationId: string) {
+  const { database } = await createSessionClient();
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    throw new Error('No user logged in');
+  }
+
+  return database.deleteDocument(
+    process.env.NEXT_PUBLIC_AI_CHAT_APP_DATABASE_ID || '',
+    'conversations',
+    conversationId,
   );
 }
 
