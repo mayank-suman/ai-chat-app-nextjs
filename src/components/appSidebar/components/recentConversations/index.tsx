@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/sidebar';
 import { deleteConversation, getConversations } from '@/lib/server/appwrite';
 import { getConversationsKey } from '@/lib/utils';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TrashIcon } from 'lucide-react';
 import { StyledAnchor } from './style';
 import {
@@ -21,17 +21,31 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { MouseEvent, useState } from 'react';
 import { redirect, useParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 function RecentConversations() {
-  const param = useParams();
-  const currentConversationId = param.id;
+  const { id: currentConversationId } = useParams();
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteConversation(id),
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: getConversationsKey(),
+      });
+
+      toast({
+        title: 'Conversation deleted',
+        variant: 'default',
+      });
+    },
+  });
 
   const { data: conversations } = useQuery({
     queryKey: getConversationsKey(),
@@ -52,15 +66,11 @@ function RecentConversations() {
       return;
     }
 
-    await deleteConversation(conversationId);
+    deleteMutation.mutate(conversationId);
 
     if (conversationId === currentConversationId) {
       redirect('/dashboard');
     }
-
-    await queryClient.invalidateQueries({
-      queryKey: getConversationsKey(),
-    });
 
     setIsDialogOpen(false);
   };
