@@ -151,6 +151,36 @@ export async function createChat({
   );
 }
 
+export async function updateChat({
+  chatId,
+  conversationId,
+  userPrompt,
+  aiResponse,
+}: {
+  chatId: string;
+  conversationId: string;
+  userPrompt: string;
+  aiResponse: string;
+}) {
+  const { database } = await createSessionClient();
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    throw new Error('No user logged in');
+  }
+
+  return database.updateDocument(
+    process.env.NEXT_PUBLIC_AI_CHAT_APP_DATABASE_ID || '',
+    'chats',
+    chatId,
+    {
+      conversation: conversationId,
+      user_prompt: userPrompt,
+      ai_response: aiResponse,
+    },
+  );
+}
+
 export async function getConversations() {
   const { database } = await createSessionClient();
   const user = await getLoggedInUser();

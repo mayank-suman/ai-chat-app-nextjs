@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { getAIResponse } from '@/lib/server/geminiAI';
-import { createChat } from '@/lib/server/appwrite';
+import { createChat, updateChat } from '@/lib/server/appwrite';
 import {
   FormSchema as GenericFormSchema,
   GenericPrompt,
@@ -10,13 +10,14 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getConversationKeyById } from '@/lib/utils';
 import { useAppLoader } from '@/hooks/use-app-loader';
+import { useState } from 'react';
 
 export function PromptInput({ conversationId }: { conversationId: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { showLoader, hideLoader } = useAppLoader();
 
-  const mutation = useMutation({
+  const newChatMutation = useMutation({
     mutationFn: (payload: {
       data: z.infer<typeof GenericFormSchema>;
       aiResponse: string;
@@ -32,21 +33,48 @@ export function PromptInput({ conversationId }: { conversationId: string }) {
         queryKey: getConversationKeyById(conversationId),
       });
     },
-    onSettled: () => {
-      hideLoader();
+  });
+
+  const updateChatMutation = useMutation({
+    mutationFn: (payload: {
+      chatId: string;
+      data: z.infer<typeof GenericFormSchema>;
+      aiResponse: string;
+    }) => {
+      return updateChat({
+        chatId: payload.chatId,
+        conversationId,
+        userPrompt: payload.data.userPrompt,
+        aiResponse: payload.aiResponse,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: getConversationKeyById(conversationId),
+      });
     },
   });
 
-  async function onSubmit(data: z.infer<typeof GenericFormSchema>) {
+  async function onSubmit(formData: z.infer<typeof GenericFormSchema>) {
     try {
       showLoader();
+
       if (!conversationId) {
         throw new Error('No conversation ID');
       }
 
-      const aiResponse = (await getAIResponse(data.userPrompt, [])) ?? '';
+      const newChat = await newChatMutation.mutateAsync({
+        data: formData,
+        aiResponse: '',
+      });
 
-      mutation.mutate({ data: data, aiResponse: aiResponse });
+      const aiResponse = (await getAIResponse(formData.userPrompt, [])) ?? '';
+
+      await updateChatMutation.mutateAsync({
+        data: formData,
+        chatId: newChat.$id,
+        aiResponse: aiResponse,
+      });
     } catch (error) {
       console.error(error);
 
@@ -55,6 +83,8 @@ export function PromptInput({ conversationId }: { conversationId: string }) {
         description: <>{error}</>,
         variant: 'destructive',
       });
+    } finally {
+      hideLoader();
     }
   }
 

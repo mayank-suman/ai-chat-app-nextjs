@@ -10,14 +10,17 @@ import {
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { getConversationsKey } from '@/lib/utils';
+import { useAppLoader } from '@/hooks/use-app-loader';
 
 export function Prompt() {
+  const { showLoader, hideLoader } = useAppLoader();
   const { toast } = useToast();
   const router = useRouter();
   const queryClient = useQueryClient();
 
   async function onSubmit(data: z.infer<typeof GenericFormSchema>) {
     try {
+      showLoader();
       const title = await getConversationTitle(data.userPrompt);
       const conversation = await createConversation({ text: title });
       const aiResponse = await getAIResponse(data.userPrompt, []);
@@ -40,6 +43,8 @@ export function Prompt() {
         description: <>{error}</>,
         variant: 'destructive',
       });
+    } finally {
+      hideLoader();
     }
   }
 
