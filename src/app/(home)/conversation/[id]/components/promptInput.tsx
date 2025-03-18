@@ -9,30 +9,37 @@ import {
 } from '@/components/prompt';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getConversationKeyById } from '@/lib/utils';
+import { useAppLoader } from '@/hooks/use-app-loader';
 
 export function PromptInput({ conversationId }: { conversationId: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { showLoader, hideLoader } = useAppLoader();
 
   const mutation = useMutation({
     mutationFn: (payload: {
       data: z.infer<typeof GenericFormSchema>;
       aiResponse: string;
-    }) =>
-      createChat({
+    }) => {
+      return createChat({
         userPrompt: payload.data.userPrompt,
         aiResponse: payload.aiResponse,
         conversationId,
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: getConversationKeyById(conversationId),
       });
     },
+    onSettled: () => {
+      hideLoader();
+    },
   });
 
   async function onSubmit(data: z.infer<typeof GenericFormSchema>) {
     try {
+      showLoader();
       if (!conversationId) {
         throw new Error('No conversation ID');
       }

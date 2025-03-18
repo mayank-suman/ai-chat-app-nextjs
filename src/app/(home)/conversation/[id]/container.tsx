@@ -1,18 +1,24 @@
 'use client';
 import { getConversationById } from '@/lib/server/appwrite';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import { useEffect } from 'react';
 import UserPrompt from './components/userPrompt';
 import { PromptInput } from './components/promptInput';
 import Response from './components/response';
 import { getConversationKeyById } from '@/lib/utils';
+import { useAppLoader } from '@/hooks/use-app-loader';
 
 function Container({ id }: { id: string }) {
-  const { data: conversation } = useQuery({
+  const { loadOrHideLoader } = useAppLoader();
+  const { data: conversation, isFetching } = useQuery({
     queryKey: getConversationKeyById(id),
     queryFn: () => getConversationById(id),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
+
+  useEffect(() => {
+    loadOrHideLoader(isFetching);
+  }, [isFetching]);
 
   return (
     <>

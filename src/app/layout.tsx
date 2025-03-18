@@ -5,6 +5,8 @@ import { Toaster } from '@/components/ui/toaster';
 import StyledComponentsRegistry from '@/lib/styledComponentsReg';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import TanstackQueryProvider from '@/components/providers/tanstack-query-provider';
+import { AppLoaderProvider } from '@/components/providers/app-loader-provider';
+import AppLoader from '@/components/appLoader';
 
 // If loading a variable font, you don't need to specify the font weight
 const DMSans = DM_Sans({
@@ -39,10 +41,13 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <main>
-                {children}
-                <Toaster />
-              </main>
+              <AppLoaderProvider>
+                <main>
+                  <AppLoader />
+                  {children}
+                  <Toaster />
+                </main>
+              </AppLoaderProvider>
             </ThemeProvider>
           </StyledComponentsRegistry>
         </TanstackQueryProvider>
