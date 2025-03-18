@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { deleteConversation, getConversations } from '@/lib/server/appwrite';
+import { deleteConversation, getConversations } from '@/lib/apis/appwrite';
 import { getConversationsKey } from '@/lib/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TrashIcon } from 'lucide-react';

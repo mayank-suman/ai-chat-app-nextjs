@@ -1,5 +1,5 @@
 'use client';
-import { getConversationById } from '@/lib/server/appwrite';
+import { getConversationById } from '@/lib/apis/appwrite';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import UserPrompt from './components/userPrompt';

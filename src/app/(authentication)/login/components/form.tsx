@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { redirect, useRouter } from 'next/navigation';
-import { signIn } from '@/lib/server/appwrite';
+import { signIn } from '@/lib/apis/appwrite';
 
 export type Inputs = {
   fullName: string;

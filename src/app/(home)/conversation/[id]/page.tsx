@@ -1,4 +1,4 @@
-import { getConversationById } from '@/lib/server/appwrite';
+import { getConversationById } from '@/lib/apis/appwrite';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/components/getQueryClient';
 import Container from './container';

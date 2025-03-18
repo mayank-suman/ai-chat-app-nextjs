@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { getAIResponse, getConversationTitle } from '@/lib/server/geminiAI';
-import { createChat, createConversation } from '@/lib/server/appwrite';
+import { createChat, createConversation } from '@/lib/apis/appwrite';
 import {
   FormSchema as GenericFormSchema,
   GenericPrompt,

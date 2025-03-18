@@ -19,7 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { signOut } from '@/lib/server/appwrite';
+import { signOut } from '@/lib/apis/appwrite';
 import useUser from '@/hooks/use-user';
 import { Button } from '../ui/button';
 import RecentConversations from './components/recentConversations';

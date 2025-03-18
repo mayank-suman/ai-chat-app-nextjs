@@ -1,7 +1,8 @@
 import { AppSidebar } from '@/components/appSidebar';
 import UserProvider from '@/components/providers/User-provider';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { getConversations, getLoggedInUser } from '@/lib/server/appwrite';
+import { getConversations } from '@/lib/apis/appwrite';
+import { getLoggedInUser } from '@/lib/server/appwrite';
 import { getConversationsKey } from '@/lib/utils';
 import {
   dehydrate,

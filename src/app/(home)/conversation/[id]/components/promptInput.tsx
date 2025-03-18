@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { getAIResponse } from '@/lib/server/geminiAI';
-import { createChat, updateChat } from '@/lib/server/appwrite';
+import { createChat, updateChat } from '@/lib/apis/appwrite';
 import {
   FormSchema as GenericFormSchema,
   GenericPrompt,
@@ -10,7 +10,6 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getConversationKeyById } from '@/lib/utils';
 import { useAppLoader } from '@/hooks/use-app-loader';
-import { useState } from 'react';
 
 export function PromptInput({ conversationId }: { conversationId: string }) {
   const { toast } = useToast();
