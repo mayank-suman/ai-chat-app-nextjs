@@ -18,6 +18,7 @@ const StyledLayout = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding-bottom: 2rem;
 
     .chat {
       display: flex;
@@ -55,6 +56,9 @@ const StyledLayout = styled.div`
   footer {
     display: flex;
     justify-content: center;
+    position: sticky;
+    bottom: 0;
+    padding: 1rem;
   }
 `;
 
