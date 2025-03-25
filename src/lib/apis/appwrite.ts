@@ -14,6 +14,17 @@ export interface Conversation extends Models.Document {
   text: string;
 }
 
+interface Chat extends Models.Document {
+  user_prompt: string;
+  ai_response: string;
+}
+
+interface DetailedConversation extends Models.Document {
+  text: string;
+  userId: string;
+  chats: Chat[];
+}
+
 const COOKIE_NAME = 'appwrite-session-cookie';
 
 export async function signUp({ email, password, fullName }: Inputs) {
@@ -156,17 +167,6 @@ export async function getConversations() {
     'conversations',
     [Query.select(['$id', 'text'])],
   );
-}
-
-interface Chat extends Models.Document {
-  user_prompt: string;
-  ai_response: string;
-}
-
-interface DetailedConversation extends Models.Document {
-  text: string;
-  userId: string;
-  chats: Chat[];
 }
 
 export async function getConversationById(conversationId: string) {
