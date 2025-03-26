@@ -1,7 +1,7 @@
 'use client';
 import { getConversationById } from '@/lib/apis/appwrite';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { use, useEffect } from 'react';
 import UserPrompt from './components/userPrompt';
 import { PromptInput } from './components/promptInput';
 import Response from './components/response';
@@ -20,6 +20,11 @@ function Container({ id }: { id: string }) {
     loadOrHideLoader(isFetching);
   }, [isFetching]);
 
+  // Scroll to the bottom of the page when the conversation changes
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [conversation]);
+
   return (
     <>
       <header>
@@ -31,8 +36,8 @@ function Container({ id }: { id: string }) {
             className='chat'
             key={chat.$id}
           >
-            <UserPrompt text={chat.user_prompt} />
-            <Response text={chat.ai_response} />
+            <UserPrompt value={chat.user_prompt} />
+            <Response value={chat.ai_response} />
           </div>
         ))}
       </div>

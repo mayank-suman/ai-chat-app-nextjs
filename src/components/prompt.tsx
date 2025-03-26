@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import styled from 'styled-components';
+import { motion } from 'motion/react';
 
 const StyledInput = styled.div`
   position: relative;
@@ -76,16 +77,35 @@ export function GenericPrompt({
             <FormItem>
               <FormControl>
                 <StyledInput>
-                  <Textarea
-                    placeholder='Enter a prompt here'
-                    {...field}
-                  />
-                  <button
-                    type='submit'
-                    disabled={isLoading}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    Submit
-                  </button>
+                    <Textarea
+                      placeholder='Enter a prompt here'
+                      {...field}
+                    />
+                    <motion.button
+                      type='submit'
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            repeat: Infinity,
+                            duration: 1,
+                            ease: 'linear',
+                          }}
+                        >
+                          ↻
+                        </motion.div>
+                      ) : (
+                        'Submit'
+                      )}
+                    </motion.button>
+                  </motion.div>
                 </StyledInput>
               </FormControl>
               <FormMessage />

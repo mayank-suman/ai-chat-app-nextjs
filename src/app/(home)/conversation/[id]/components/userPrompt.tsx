@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import useUser from '@/hooks/use-user';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import React from 'react';
+import * as motion from 'motion/react-client';
 
 const getFirstLetters = (name: string) => {
   const [first, last] = name.split(' ');
@@ -10,12 +11,22 @@ const getFirstLetters = (name: string) => {
   return `${first[0]}${last[0]}`;
 };
 
-function UserPrompt({ text }: { text: string }) {
+function UserPrompt({ value }: { value: string }) {
   const user = useUser();
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
 
   return (
-    <div className='user-prompt'>
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: 10,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      className='user-prompt'
+    >
       <Avatar>
         <AvatarFallback>{getFirstLetters(user.name)}</AvatarFallback>
       </Avatar>
@@ -31,8 +42,8 @@ function UserPrompt({ text }: { text: string }) {
           onClick={() => setIsExpanded((prev) => !prev)}
         />
       )}
-      <h2>{text}</h2>
-    </div>
+      <h2>{value}</h2>
+    </motion.div>
   );
 }
 
